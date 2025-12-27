@@ -1,0 +1,36 @@
+:root {
+  --primary-purple: #7c5ba6;
+  --deep-purple: #5a3d7f;
+  --lavender: #b39cd0;
+  --light-lavender: #d4c5e8;
+  --sage-green: #8faa96;
+  --deep-sage: #6b8e7a;
+  --mint: #b8d4c6;
+  --cream: #f5f1ed;
+  --rose-gold: #e8b4b8;
+  --gold: #d4af76;
+  --text-dark: #2d2d3d;
+  --text-light: #6b6b7f;
+  --white: #ffffff;
+
+  --gradient-primary: linear-gradient(135deg, #7c5ba6 0%, #b39cd0 100%);
+  --gradient-sage: linear-gradient(135deg, #8faa96 0%, #b8d4c6 100%);
+  --gradient-sunset: linear-gradient(135deg, #e8b4b8 0%, #d4af76 50%, #b39cd0 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+body {
+  margin: 0;
+  color: var(--text-dark);
+  background: var(--cream);
+  line-height: 1.8;
+  overflow-x: hidden;
+}
