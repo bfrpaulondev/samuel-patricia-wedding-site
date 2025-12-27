@@ -171,43 +171,6 @@ function FloatingFlowers() {
   );
 }
 
-function PageLoader({ open }: { open: boolean }) {
-  if (!open) return null;
-
-  return (
-    <Box
-      sx={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 9999,
-        display: "grid",
-        placeItems: "center",
-        background: "var(--gradient-primary)",
-      }}
-    >
-      <Box sx={{ textAlign: "center" }}>
-        <motion.div
-          animate={{ scale: [1, 1.3, 1], opacity: [1, 0.7, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          style={{ fontSize: 60 }}
-        >
-          💜
-        </motion.div>
-        <Typography
-          sx={{
-            mt: 2,
-            color: "var(--white)",
-            fontFamily: '"Playfair Display", serif',
-            letterSpacing: 3,
-          }}
-        >
-          A preparar…
-        </Typography>
-      </Box>
-    </Box>
-  );
-}
-
 function Countdown() {
   const [time, setTime] = useState<CountdownState>(() => calcCountdown());
 
@@ -354,7 +317,6 @@ export default function App() {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <PageLoader open={loading} />
       <FloatingFlowers />
 
       {/* HERO */}
@@ -409,9 +371,9 @@ export default function App() {
             <Typography
               component="h1"
               sx={{
-                fontFamily: '"Tangerine", cursive',
+                fontFamily: '"Yesteryear", fancy',
                 fontWeight: 400,
-                fontSize: { xs: "3.5rem", sm: "6rem", md: "10rem" },
+                fontSize: { xs: "3.5rem", sm: "3rem", md: "5rem" },
                 color: "var(--white)",
                 textShadow:
                   "2px 2px 4px rgba(0,0,0,0.3), 0 0 40px rgba(212,175,118,0.5)",
@@ -458,7 +420,6 @@ export default function App() {
                 variant="contained"
                 sx={{
                   borderRadius: 999,
-                  px: 4,
                   py: 1.6,
                   textTransform: "uppercase",
                   letterSpacing: 1.5,
@@ -511,7 +472,7 @@ export default function App() {
             >
               Estamos muito felizes em compartilhar esse momento único nas nossas vidas com vocês. Aqui vamos dividir
               momentos marcantes da nossa história e informações importantes para o Grande Dia. Sua presença é o maior
-              presente que podemos receber! 💜
+              presente que podemos receber! 
             </Typography>
           </motion.div>
         </Container>
@@ -869,9 +830,6 @@ export default function App() {
       {/* FOOTER */}
       <Box sx={{ background: "var(--deep-purple)", color: "var(--light-lavender)", textAlign: "center", py: 8, position: "relative", zIndex: 1 }}>
         <Container sx={{ maxWidth: 820 }}>
-          <motion.div animate={{ scale: [1, 1.2, 1] }} transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }} style={{ fontSize: 30 }}>
-            💜
-          </motion.div>
           <Typography sx={{ mt: 2, fontSize: "1.1rem" }}>Obrigado por fazer parte da nossa história de amor!</Typography>
           <Typography sx={{ mt: 2, fontFamily: '"Great Vibes", cursive', fontSize: { xs: "2.2rem", md: "2.8rem" }, color: "var(--gold)" }}>
             Samuel & Patrícia
