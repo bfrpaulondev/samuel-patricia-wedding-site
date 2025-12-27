@@ -1,15 +1,14 @@
-// src/main.tsx
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { ThemeProvider, CssBaseline } from "@mui/material";
-import { registerSW } from "virtual:pwa-register";
 import App from "./App";
 import { theme } from "./theme";
 import "./styles/global.css";
 
-registerSW({ immediate: true });
+const el = document.getElementById("root");
+if (!el) throw new Error("Missing #root in index.html");
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(el).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
