@@ -746,7 +746,7 @@ export default function App() {
                 mx: "auto",
                 mt: 8,
                 p: { xs: 3, md: 7 },
-                borderRadius: { xs: 6, md: 10 },
+                borderRadius: { xs: 1, md: 1 },
                 background: "rgba(255,255,255,0.95)",
                 backdropFilter: "blur(20px)",
                 boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
