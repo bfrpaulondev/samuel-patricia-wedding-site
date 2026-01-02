@@ -12,8 +12,11 @@ import {
   Select,
   TextField,
   Typography,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import { motion, useScroll, useTransform } from "framer-motion";
+import apiService from "./services/api";
 
 type CountdownState = { days: string; hours: string; minutes: string; seconds: string };
 
@@ -281,6 +284,7 @@ export default function App() {
   const [confirmacao, setConfirmacao] = useState<"" | "sim" | "nao">("");
   const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState("");
 
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 600], [0, 180]);
@@ -299,20 +303,41 @@ export default function App() {
 
     setSubmitting(true);
     setSent(false);
+    setError("");
 
-    await new Promise((r) => setTimeout(r, 1500));
+    try {
+      const formData = new FormData(e.currentTarget);
+      
+      const data = {
+        fullName: formData.get('fullName') as string,
+        email: formData.get('email') as string,
+        phone: formData.get('phone') as string || undefined,
+        willAttend: confirmacao === 'sim',
+        numberOfGuests: confirmacao === 'sim' ? parseInt(formData.get('numberOfGuests') as string || '0') : 0,
+        message: formData.get('message') as string || undefined,
+      };
 
-    confetti({
-      particleCount: 100,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ["#7C5BA6", "#B39CD0", "#8FAA96", "#D4AF76", "#E8B4B8"],
-    });
+      const response = await apiService.submitConfirmation(data);
 
-    setSent(true);
-    setSubmitting(false);
-    (e.currentTarget as HTMLFormElement).reset();
-    setConfirmacao("");
+      if (response.success) {
+        confetti({
+          particleCount: 100,
+          spread: 70,
+          origin: { y: 0.6 },
+          colors: ["#7C5BA6", "#B39CD0", "#8FAA96", "#D4AF76", "#E8B4B8"],
+        });
+
+        setSent(true);
+        (e.currentTarget as HTMLFormElement).reset();
+        setConfirmacao("");
+      } else {
+        setError(response.message || 'Erro ao enviar confirmação');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Erro ao enviar confirmação. Tente novamente.');
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -752,21 +777,33 @@ export default function App() {
                 boxShadow: "0 20px 60px rgba(0,0,0,0.2)",
               }}
             >
+              {error && (
+                <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
+                  {error}
+                </Alert>
+              )}
+              
+              {sent && (
+                <Alert severity="success" sx={{ mb: 3 }}>
+                  Confirmação enviada com sucesso! Obrigado! 💜
+                </Alert>
+              )}
+
               <Box component="form" onSubmit={onSubmit}>
                 <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
                   Nome Completo *
                 </Typography>
-                <TextField fullWidth required placeholder="Digite seu nome completo" sx={{ mb: 3 }} />
+                <TextField name="fullName" fullWidth required placeholder="Digite seu nome completo" sx={{ mb: 3 }} />
 
                 <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
                   Email *
                 </Typography>
-                <TextField fullWidth required type="email" placeholder="seu@email.com" sx={{ mb: 3 }} />
+                <TextField name="email" fullWidth required type="email" placeholder="seu@email.com" sx={{ mb: 3 }} />
 
                 <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
                   Telefone
                 </Typography>
-                <TextField fullWidth placeholder="+351 912 345 678" sx={{ mb: 3 }} />
+                <TextField name="phone" fullWidth placeholder="+351 912 345 678" sx={{ mb: 3 }} />
 
                 <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
                   Você confirma sua presença? *
@@ -793,14 +830,14 @@ export default function App() {
                     <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
                       Número de Acompanhantes
                     </Typography>
-                    <TextField fullWidth type="number" inputProps={{ min: 0, max: 10 }} placeholder="0" sx={{ mb: 3 }} />
+                    <TextField name="numberOfGuests" fullWidth type="number" inputProps={{ min: 0, max: 10 }} placeholder="0" sx={{ mb: 3 }} />
                   </>
                 )}
 
                 <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
                   Deixe uma mensagem carinhosa (Opcional)
                 </Typography>
-                <TextField fullWidth multiline minRows={4} placeholder="Escreva uma mensagem especial para os noivos..." sx={{ mb: 3 }} />
+                <TextField name="message" fullWidth multiline minRows={4} placeholder="Escreva uma mensagem especial para os noivos..." sx={{ mb: 3 }} />
 
                 <Button
                   type="submit"
@@ -832,6 +869,17 @@ export default function App() {
         <Container sx={{ maxWidth: 820 }}>
           <Typography sx={{ mt: 2, fontSize: "1.1rem" }}>Obrigado por fazer parte da nossa história de amor!</Typography>
           <Typography sx={{ mt: 2, fontFamily: '"Great Vibes", cursive', fontSize: { xs: "2.2rem", md: "2.8rem" }, color: "var(--gold)" }}>
+            Samuel & Patrícia
+          </Typography>
+          <Typography sx={{ mt: 1, letterSpacing: 3, textTransform: "uppercase", color: "var(--mint)", fontWeight: 700 }}>
+            17 • 05 • 2026
+          </Typography>
+        </Container>
+      </Box>
+    </Box>
+  );
+}
+2, fontFamily: '"Great Vibes", cursive', fontSize: { xs: "2.2rem", md: "2.8rem" }, color: "var(--gold)" }}>
             Samuel & Patrícia
           </Typography>
           <Typography sx={{ mt: 1, letterSpacing: 3, textTransform: "uppercase", color: "var(--mint)", fontWeight: 700 }}>
