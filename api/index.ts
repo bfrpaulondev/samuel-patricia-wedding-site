@@ -1,19 +1,17 @@
+// Carregar variáveis de ambiente PRIMEIRO
+import { config } from './config/env';
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import dotenv from 'dotenv';
-import connectDB from './config/database';
+import { connectDB } from './config/database';
 import confirmationsRouter from './routes/confirmations';
 import adminRouter from './routes/admin';
 import { apiLimiter } from './middleware/rateLimiter';
 
-// Carregar variáveis de ambiente
-dotenv.config();
-
 const app: Application = express();
-const PORT = process.env.PORT || 5000;
+const PORT = config.server.port;
 
 // Conectar ao MongoDB
 connectDB();
@@ -21,7 +19,7 @@ connectDB();
 // Middlewares de segurança
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: config.server.corsOrigin,
   credentials: true
 }));
 

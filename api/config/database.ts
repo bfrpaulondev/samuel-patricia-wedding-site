@@ -1,14 +1,17 @@
 import mongoose from 'mongoose';
-
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/wedding-app';
+import { config } from './env';
 
 export const connectDB = async (): Promise<void> => {
   try {
-    await mongoose.connect(MONGODB_URI);
+    console.log('🔍 Tentando conectar ao MongoDB...');
+    console.log('🔗 URI:', config.mongodb.uri.substring(0, 30) + '...');
+    
+    await mongoose.connect(config.mongodb.uri);
     console.log('✅ MongoDB conectado com sucesso!');
   } catch (error) {
     console.error('❌ Erro ao conectar ao MongoDB:', error);
-    process.exit(1);
+    // Não fazer exit para permitir que a API rode sem MongoDB (para testes)
+    console.log('⚠️ API rodando sem MongoDB');
   }
 };
 
