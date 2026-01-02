@@ -5,7 +5,6 @@ import {
   Typography,
   Card,
   CardContent,
-  Grid,
   Tabs,
   Tab,
   Button,
@@ -66,6 +65,7 @@ interface Stats {
   totalGuests: number;
 }
 
+// -.-.-.-
 export default function AdminDashboard() {
   const { admin, logout } = useAuth();
   const [tab, setTab] = useState(0);
@@ -82,6 +82,7 @@ export default function AdminDashboard() {
     loadData();
   }, [tab]);
 
+  // -.-.-.-
   const loadData = async () => {
     setLoading(true);
     setError('');
@@ -106,6 +107,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // -.-.-.-
   const handleApprove = async (id: string) => {
     try {
       await apiService.approveConfirmation(id);
@@ -116,6 +118,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // -.-.-.-
   const handleReject = async (id: string) => {
     try {
       await apiService.rejectConfirmation(id);
@@ -126,6 +129,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // -.-.-.-
   const handleDelete = async (id: string) => {
     if (!window.confirm('Tem certeza que deseja deletar esta confirmação?')) {
       return;
@@ -140,6 +144,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // -.-.-.-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'approved':
@@ -151,6 +156,7 @@ export default function AdminDashboard() {
     }
   };
 
+  // -.-.-.-
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'approved':
@@ -184,11 +190,22 @@ export default function AdminDashboard() {
           </Alert>
         )}
 
-        {/* Estatísticas */}
+        {/* Estatísticas - CSS Grid Layout */}
         {stats && (
-          <Grid container spacing={3} sx={{ mb: 4 }}>
-            <Grid item xs={12} sm={6} md={3}>
-              <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: {
+                xs: '1fr',
+                sm: 'repeat(2, 1fr)',
+                md: 'repeat(4, 1fr)',
+              },
+              gap: 3,
+              mb: 4,
+            }}
+          >
+            <Box>
+              <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', height: '100%' }}>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
@@ -201,10 +218,10 @@ export default function AdminDashboard() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Card sx={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
+            <Box>
+              <Card sx={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white', height: '100%' }}>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
@@ -217,10 +234,10 @@ export default function AdminDashboard() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Card sx={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white' }}>
+            <Box>
+              <Card sx={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white', height: '100%' }}>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
@@ -233,10 +250,10 @@ export default function AdminDashboard() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Box>
 
-            <Grid item xs={12} sm={6} md={3}>
-              <Card sx={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', color: 'white' }}>
+            <Box>
+              <Card sx={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', color: 'white', height: '100%' }}>
                 <CardContent>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Box>
@@ -249,8 +266,8 @@ export default function AdminDashboard() {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         )}
 
         {/* Tabs e Tabela */}

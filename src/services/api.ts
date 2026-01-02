@@ -13,26 +13,37 @@ class ApiService {
 
   constructor() {
     this.baseUrl = API_BASE_URL;
-    this.token = localStorage.getItem('admin_token');
+    // SSR protection for localStorage access
+    this.token = typeof window !== 'undefined' 
+      ? localStorage.getItem('admin_token') 
+      : null;
   }
 
+  // -.-.-.-
   setToken(token: string) {
     this.token = token;
-    localStorage.setItem('admin_token', token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin_token', token);
+    }
   }
 
+  // -.-.-.-
   clearToken() {
     this.token = null;
-    localStorage.removeItem('admin_token');
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('admin_token');
+    }
   }
 
+  // -.-.-.-
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const headers: HeadersInit = {
+    // Fix: Use Record<string, string> to allow 'Authorization' indexing
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
+      ...(options.headers as Record<string, string>),
     };
 
     if (this.token) {
@@ -58,7 +69,7 @@ class ApiService {
     }
   }
 
-  // Confirmações públicas
+  // -.-.-.-
   async submitConfirmation(data: {
     fullName: string;
     email: string;
@@ -73,13 +84,15 @@ class ApiService {
     });
   }
 
+  // -.-.-.-
   async checkConfirmation(email: string): Promise<ApiResponse> {
     return this.request(`/confirmations/check/${encodeURIComponent(email)}`);
   }
 
-  // Admin - Autenticação
+  // -.-.-.-
   async login(username: string, password: string): Promise<ApiResponse> {
-    const response = await this.request('/admin/login', {
+    // Fix: Explicit generic typing to recognize 'token' property
+    const response = await this.request<{ token: string }>('/admin/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
     });
@@ -91,11 +104,12 @@ class ApiService {
     return response;
   }
 
+  // -.-.-.-
   logout() {
     this.clearToken();
   }
 
-  // Admin - Confirmações
+  // -.-.-.-
   async getConfirmations(params: {
     status?: string;
     page?: number;
@@ -109,24 +123,28 @@ class ApiService {
     return this.request(`/admin/confirmations?${queryParams.toString()}`);
   }
 
+  // -.-.-.-
   async approveConfirmation(id: string): Promise<ApiResponse> {
     return this.request(`/admin/confirmations/${id}/approve`, {
       method: 'PATCH',
     });
   }
 
+  // -.-.-.-
   async rejectConfirmation(id: string): Promise<ApiResponse> {
     return this.request(`/admin/confirmations/${id}/reject`, {
       method: 'PATCH',
     });
   }
 
+  // -.-.-.-
   async deleteConfirmation(id: string): Promise<ApiResponse> {
     return this.request(`/admin/confirmations/${id}`, {
       method: 'DELETE',
     });
   }
 
+  // -.-.-.-
   async getStats(): Promise<ApiResponse> {
     return this.request('/admin/stats');
   }
