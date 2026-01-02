@@ -1,4 +1,4 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, CallbackError } from 'mongoose';
 import bcrypt from 'bcryptjs';
 
 export interface IAdmin extends Document {
@@ -51,15 +51,17 @@ const AdminSchema: Schema = new Schema({
 });
 
 // Hash da senha antes de salvar
-AdminSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
+AdminSchema.pre('save', async function(next: (err?: CallbackError) => void) {
+  if (!this.isModified('password')) {
+    return next();
+  }
   
   try {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
     next();
-  } catch (error: any) {
-    next(error);
+  } catch (error) {
+    next(error as CallbackError);
   }
 });
 

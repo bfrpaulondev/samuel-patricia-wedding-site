@@ -7,6 +7,16 @@ interface ApiResponse<T = any> {
   errors?: any[];
 }
 
+interface LoginResponse {
+  token: string;
+  admin: {
+    id: string;
+    username: string;
+    email: string;
+    role: string;
+  };
+}
+
 class ApiService {
   private baseUrl: string;
   private token: string | null = null;
@@ -30,10 +40,13 @@ class ApiService {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const headers: HeadersInit = {
+    const headers: Record<string, string> = {
       'Content-Type': 'application/json',
-      ...options.headers,
     };
+
+    if (options.headers) {
+      Object.assign(headers, options.headers);
+    }
 
     if (this.token) {
       headers['Authorization'] = `Bearer ${this.token}`;
@@ -78,8 +91,8 @@ class ApiService {
   }
 
   // Admin - Autenticação
-  async login(username: string, password: string): Promise<ApiResponse> {
-    const response = await this.request('/admin/login', {
+  async login(username: string, password: string): Promise<ApiResponse<LoginResponse>> {
+    const response = await this.request<LoginResponse>('/admin/login', {
       method: 'POST',
       body: JSON.stringify({ username, password }),
     });

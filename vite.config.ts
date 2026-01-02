@@ -3,4 +3,16 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'mui-vendor': ['@mui/material', '@mui/icons-material', '@emotion/react', '@emotion/styled'],
+          'animation-vendor': ['framer-motion', 'canvas-confetti']
+        }
+      }
+    },
+    chunkSizeWarningLimit: 1000
+  }
 });
