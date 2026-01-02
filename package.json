@@ -5,13 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:api": "tsx watch api/index.ts",
+    "dev:api": "tsx watch api-src/index.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:api\"",
     "build": "tsc -b && vite build",
-    "build:api": "tsc api/index.ts --outDir dist/api",
+    "build:api": "tsc api-src/index.ts --outDir dist/api",
     "lint": "eslint .",
     "preview": "vite preview",
-    "setup-admin": "tsx api/setup-admin.ts"
+    "setup-admin": "tsx api-src/setup-admin.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -48,6 +48,7 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/swagger-jsdoc": "^6.0.4",
     "@types/swagger-ui-express": "^4.1.8",
+    "@vercel/node": "^5.5.16",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
     "eslint-plugin-react-hooks": "^7.0.1",

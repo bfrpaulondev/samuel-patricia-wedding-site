@@ -1,34 +1,51 @@
-// Carregar variáveis de ambiente PRIMEIRO
-import { config } from './config/env';
-import express, { Application, Request, Response } from 'express';
+import type { VercelRequest, VercelResponse } from '@vercel/node';
+import { config } from '../api-src/config/env';
+import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { connectDB } from './config/database';
-import confirmationsRouter from './routes/confirmations';
-import adminRouter from './routes/admin';
-import { apiLimiter } from './middleware/rateLimiter';
+import { connectDB } from '../api-src/config/database';
+import confirmationsRouter from '../api-src/routes/confirmations';
+import adminRouter from '../api-src/routes/admin';
+import { apiLimiter } from '../api-src/middleware/rateLimiter';
 
 const app: Application = express();
-const PORT = config.server.port;
 
-// Conectar ao MongoDB
-connectDB();
+// Cache da conexão MongoDB
+let isConnected = false;
+
+async function initializeDB() {
+  if (!isConnected) {
+    try {
+      await connectDB();
+      isConnected = true;
+      console.log('✅ MongoDB connection initialized');
+    } catch (error) {
+      console.error('❌ MongoDB connection failed:', error);
+    }
+  }
+}
 
 // Middlewares de segurança
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: false, // Desabilitar para Vercel
+  crossOriginEmbedderPolicy: false
+}));
+
 app.use(cors({
-  origin: config.server.corsOrigin,
-  credentials: true
+  origin: process.env.CORS_ORIGIN || '*',
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 // Middlewares gerais
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Rate limiting
-app.use('/api/', apiLimiter);
+// Rate limiting (ajustado para serverless)
+app.use(apiLimiter);
 
 // Configuração do Swagger
 const swaggerOptions = {
@@ -37,16 +54,18 @@ const swaggerOptions = {
     info: {
       title: 'Wedding Confirmation API',
       version: '1.0.0',
-      description: 'API para gerenciamento de confirmações de casamento',
+      description: 'API para gerenciamento de confirmações de casamento - Samuel & Patrícia',
       contact: {
         name: 'Samuel & Patrícia',
-        email: 'contato@casamento.com'
+        email: 'samuel@casamento.com'
       }
     },
     servers: [
       {
-        url: process.env.API_URL || 'http://samuel-patricia-wedding-site.vercel.app',
-        description: 'Servidor de Desenvolvimento'
+        url: process.env.VERCEL_URL 
+          ? `https://${process.env.VERCEL_URL}`
+          : 'http://localhost:5000',
+        description: 'API Server'
       }
     ],
     components: {
@@ -57,63 +76,66 @@ const swaggerOptions = {
           bearerFormat: 'JWT'
         }
       }
-    },
-    security: [{
-      bearerAuth: []
-    }]
+    }
   },
-  apis: ['./api/routes/*.ts']
+  apis: ['./api-src/routes/*.ts']
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs, {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Wedding API Docs'
-}));
 
-// Rotas
-app.get('/', (req: Request, res: Response) => {
+// Rotas principais
+app.get('/', (req, res) => {
   res.json({
-    message: 'Wedding Confirmation API',
+    success: true,
+    message: 'Wedding Confirmation API - Samuel & Patrícia',
     version: '1.0.0',
-    docs: '/api-docs'
+    endpoints: {
+      health: '/api/health',
+      confirmations: '/api/confirmations',
+      admin: '/api/admin',
+      docs: '/api/api-docs'
+    },
+    wedding: {
+      couple: 'Samuel & Patrícia',
+      date: '2026-05-17',
+      location: 'Setúbal, Portugal'
+    }
   });
 });
 
-app.get('/health', (req: Request, res: Response) => {
+app.get('/health', (req, res) => {
   res.json({
     status: 'OK',
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    mongodb: isConnected ? 'connected' : 'disconnected'
   });
 });
 
-app.use('/api/confirmations', confirmationsRouter);
-app.use('/api/admin', adminRouter);
+// Documentação Swagger
+app.use('/api-docs', swaggerUi.serve);
+app.get('/api-docs', swaggerUi.setup(swaggerDocs, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Wedding API - Samuel & Patrícia'
+}));
+
+// Rotas da aplicação
+app.use('/confirmations', confirmationsRouter);
+app.use('/admin', adminRouter);
 
 // Rota 404
-app.use((req: Request, res: Response) => {
+app.use('*', (req, res) => {
   res.status(404).json({
     success: false,
-    message: 'Rota não encontrada'
+    message: 'Rota não encontrada',
+    path: req.originalUrl
   });
 });
 
-// Middleware de erro global
-app.use((err: any, req: Request, res: Response, next: any) => {
-  console.error('Erro:', err);
-  res.status(err.status || 500).json({
-    success: false,
-    message: err.message || 'Erro interno do servidor',
-    error: process.env.NODE_ENV === 'development' ? err : undefined
-  });
-});
-
-// Iniciar servidor (apenas se não for Vercel)
-if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor rodando na porta ${PORT}`);
-    console.log(`📚 Documentação: http://localhost:${PORT}/api-docs`);
-  });
+// Handler para Vercel Serverless
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  // Inicializar MongoDB na primeira requisição
+  await initializeDB();
+  
+  // Processar requisição através do Express
+  return app(req as any, res as any);
 }
-
-export default app;
