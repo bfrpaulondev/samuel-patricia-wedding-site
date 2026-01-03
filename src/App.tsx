@@ -878,14 +878,14 @@ export default function App() {
               }}
             >
               {error && (
-                <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError('')}>
+                <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError("")}>
                   {error}
                 </Alert>
               )}
               
               {sent && (
                 <Alert severity="success" sx={{ mb: 3 }}>
-                  Confirmação enviada com sucesso! Obrigado! 💜
+                  Confirmacao enviada com sucesso! Obrigado!
                 </Alert>
               )}
 
