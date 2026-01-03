@@ -28,7 +28,7 @@ async function initializeDB() {
 
 // Middlewares
 app.use(helmet({ contentSecurityPolicy: false, crossOriginEmbedderPolicy: false }));
-app.use(cors({ origin: process.env.CORS_ORIGIN || '*', credentials: true }));
+app.use(cors({ origin: process.env.CORS_ORIGIN as string, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(apiLimiter);
@@ -42,7 +42,7 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'Samuel & Patrícia Wedding Confirmation API'
     },
-    servers: [{ url: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5000' }],
+    servers: [{ url: process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://samuel-patricia-wedding-site.vercel.app' }],
     components: { securitySchemes: { bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' } } }
   },
   apis: ['./api/routes/*.ts']

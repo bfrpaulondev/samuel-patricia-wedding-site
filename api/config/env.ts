@@ -5,20 +5,20 @@ dotenv.config();
 
 export const config = {
   mongodb: {
-    uri: process.env.MONGODB_URI || 'mongodb://localhost:27017/wedding-app'
+    uri: process.env.MONGODB_URI as string
   },
   jwt: {
-    secret: process.env.JWT_SECRET || 'your-super-secret-jwt-key',
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d'
+    secret: process.env.JWT_SECRET as string,
+    expiresIn: process.env.JWT_EXPIRES_IN as string
   },
   server: {
     port: parseInt(process.env.PORT || '5000'),
-    nodeEnv: process.env.NODE_ENV || 'development',
-    corsOrigin: process.env.CORS_ORIGIN || '*'
+    nodeEnv: process.env.NODE_ENV as string,
+    corsOrigin: process.env.CORS_ORIGIN as string
   },
   admin: {
-    username: process.env.ADMIN_USERNAME || 'samuel',
-    email: process.env.ADMIN_EMAIL || 'samuel@casamento.com',
-    password: process.env.ADMIN_PASSWORD || 'NoivosSamuelPatricia2026!'
+    username: process.env.ADMIN_USERNAME as string,
+    email: process.env.ADMIN_EMAIL as string,
+    password: process.env.ADMIN_PASSWORD as string
   }
 };

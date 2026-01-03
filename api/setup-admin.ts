@@ -20,9 +20,9 @@ async function createInitialAdmin() {
     }
 
     const admin = new Admin({
-      username: process.env.ADMIN_USERNAME || 'samuel',
-      email: process.env.ADMIN_EMAIL || 'samuel@casamento.com',
-      password: process.env.ADMIN_PASSWORD || 'NoivosSamuelPatricia2026!',
+      username: process.env.ADMIN_USERNAME ?? 'samuel',
+      email: process.env.ADMIN_EMAIL ?? 'samuel@casamento.com',
+      password: process.env.ADMIN_PASSWORD ?? 'NoivosSamuelPatricia2026!',
       role: 'superadmin',
       isActive: true
     });
