@@ -399,9 +399,9 @@ export default function App() {
             <Typography
               component="h1"
               sx={{
-                fontFamily: '"Yesteryear", fancy',
-                fontWeight: 400,
-                fontSize: { xs: "3.5rem", sm: "3rem", md: "5rem" },
+                fontFamily: '"Tangerine", cursive',
+                fontWeight: 700,
+                fontSize: { xs: "5rem", sm: "6rem", md: "8rem" },
                 color: "var(--white)",
                 textShadow:
                   "2px 2px 4px rgba(0,0,0,0.3), 0 0 40px rgba(212,175,118,0.5)",
