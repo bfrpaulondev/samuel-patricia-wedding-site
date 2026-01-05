@@ -491,6 +491,7 @@ export default function App() {
               src="/bible-quote.jpg"
               alt="Versículo Bíblico - Colossenses 3:14"
               sx={{
+                display: "block",
                 maxWidth: 820,
                 mx: "auto",
                 mt: 6,

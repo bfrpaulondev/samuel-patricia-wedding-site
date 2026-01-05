@@ -1,73 +1,106 @@
-# React + TypeScript + Vite
+# 💍 Samuel & Patrícia - Wedding Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Site de casamento para Samuel & Patrícia - 17 de Maio de 2026
 
-Currently, two official plugins are available:
+## 🎨 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ✅ Design elegante e responsivo
+- ✅ Countdown para o grande dia
+- ✅ Formulário de confirmação de presença (RSVP)
+- ✅ Informações sobre cerimônia e festa
+- ✅ Seção de presentes com MBway
+- ✅ Checkbox de consentimento LGPD
+- ✅ Animações suaves com Framer Motion
+- ✅ Fonte Tangerine para os nomes dos noivos
 
-## React Compiler
+## 🚀 Stack Tecnológica
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **React 18** - Framework UI
+- **TypeScript** - Type safety
+- **Vite** - Build tool e dev server
+- **Material-UI (MUI)** - Componentes UI
+- **Framer Motion** - Animações
+- **Canvas Confetti** - Efeitos de confete
 
-## Expanding the ESLint configuration
+## 📦 Instalação
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# Instalar dependências
+npm install
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# Executar em desenvolvimento
+npm run dev
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+# Build para produção
+npm run build
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Preview do build
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🌐 Deploy
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+O site está hospedado na **Vercel**:
+- 🔗 URL: https://samuel-patricia-wedding-site.vercel.app/
+- 📂 Branch: `main`
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+Deploy automático a cada push na branch `main`.
+
+## 📁 Estrutura do Projeto
+
 ```
+wedding-site/
+├── public/               # Arquivos estáticos
+│   └── bible-quote.jpg  # Imagem do versículo bíblico
+├── src/
+│   ├── components/      # Componentes React
+│   ├── pages/          # Páginas
+│   ├── services/       # API services
+│   ├── styles/         # Estilos globais
+│   ├── App.tsx         # Componente principal
+│   ├── main.tsx        # Entry point
+│   └── index.css       # Estilos globais
+├── index.html          # HTML template
+├── package.json        # Dependências
+├── tsconfig.json       # TypeScript config
+├── vite.config.ts      # Vite config
+└── vercel.json         # Vercel config
+```
+
+## 🎨 Paleta de Cores
+
+```css
+--deep-purple: #7C5BA6    /* Roxo principal */
+--light-lavender: #B39CD0 /* Lavanda clara */
+--mint: #8FAA96           /* Verde-menta */
+--gold: #D4AF76           /* Dourado */
+--rose-quartz: #E8B4B8    /* Rosa quartzo */
+--cream: #FAF9F6          /* Creme */
+```
+
+## 📱 Responsividade
+
+O site é 100% responsivo e funciona perfeitamente em:
+- 📱 Mobile (iOS e Android)
+- 📱 Tablets
+- 💻 Desktop
+- 🖥️ Monitores widescreen
+
+## 🔗 Backend API
+
+A API do backend está em um repositório separado:
+- 🔗 https://github.com/bfrpaulondev/samuel-patricia-wedding-api
+
+## 📞 Contatos dos Noivos
+
+- **Patrícia:** +351 931 740 492
+- **Samuel:** +351 933 245 603
+
+## 📄 Licença
+
+© 2026 Samuel & Patrícia - Todos os direitos reservados
+
+---
+
+*Desenvolvido com ❤️ para o casamento de Samuel & Patrícia*  
+*17 de Maio de 2026 - Setúbal, Portugal*
