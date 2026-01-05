@@ -980,49 +980,7 @@ export default function App() {
         </Container>
       </Box>
 
-           {/* FOOTER */}
-      <Box
-        sx={{
-          background: "var(--deep-purple)",
-          color: "var(--light-lavender)",
-          textAlign: "center",
-          py: 8,
-          position: "relative",
-          zIndex: 1,
-        }}
-      >
-        <Container sx={{ maxWidth: 820 }}>
-          <Typography sx={{ mt: 2, fontSize: "1.1rem" }}>
-            Obrigado por fazer parte da nossa história de amor!
-          </Typography>
-
-          <Typography
-            sx={{
-              mt: 2,
-              fontFamily: '"Tangerine", cursive',
-              fontSize: { xs: "3.5rem", md: "4.5rem" },
-              fontWeight: 700,
-              color: "var(--gold)",
-            }}
-          >
-            Samuel & Patrícia
-          </Typography>
-
-          <Typography
-            sx={{
-              mt: 1,
-              letterSpacing: 3,
-              textTransform: "uppercase",
-              color: "var(--mint)",
-              fontWeight: 700,
-            }}
-          >
-            17 • 05 • 2026
-          </Typography>
-        </Container>
-      </Box>
-
-      {/* DEVELOPER FOOTER */}
+      {/* FOOTER */}
       <Box
         sx={{
           background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
