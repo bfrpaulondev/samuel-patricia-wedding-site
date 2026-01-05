@@ -43,16 +43,14 @@ import apiService from '../services/api';
 
 interface Confirmation {
   _id: string;
-  fullName: string;
+  name: string;
   email: string;
-  phone?: string;
-  willAttend: boolean;
-  numberOfGuests: number;
+  guests: number;
   message?: string;
-  status: 'pending' | 'approved' | 'rejected';
-  submittedAt: string;
-  reviewedAt?: string;
-  reviewedBy?: string;
+  dietary?: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  createdAt: string;
+  updatedAt: string;
 }
 
 interface Stats {
@@ -75,7 +73,7 @@ export default function AdminDashboard() {
   const [selectedConfirmation, setSelectedConfirmation] = useState<Confirmation | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
 
-  const statusMap = ['all', 'pending', 'approved', 'rejected'];
+  const statusMap = ['all', 'PENDING', 'APPROVED', 'REJECTED'];
 
   useEffect(() => {
     loadData();
@@ -87,16 +85,18 @@ export default function AdminDashboard() {
 
     try {
       const [confirmationsRes, statsRes] = await Promise.all([
-        apiService.getConfirmations({ status: statusMap[tab] }),
+        apiService.getConfirmations({ status: statusMap[tab] === 'all' ? undefined : statusMap[tab] }),
         apiService.getStats(),
       ]);
 
-      if (confirmationsRes.success && confirmationsRes.data) {
-        setConfirmations(confirmationsRes.data.confirmations);
+      // A API retorna: { rsvps: [...], total: N, page: N, pages: N }
+      if (confirmationsRes.rsvps) {
+        setConfirmations(confirmationsRes.rsvps);
       }
 
-      if (statsRes.success && statsRes.data) {
-        setStats(statsRes.data);
+      // A API retorna as stats diretamente
+      if (statsRes) {
+        setStats(statsRes);
       }
     } catch (err: any) {
       setError(err.message || 'Erro ao carregar dados');
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
 
   const handleApprove = async (id: string) => {
     try {
-      await apiService.approveConfirmation(id);
+      await apiService.updateConfirmationStatus(id, 'APPROVED');
       loadData();
       setDialogOpen(false);
     } catch (err: any) {
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
 
   const handleReject = async (id: string) => {
     try {
-      await apiService.rejectConfirmation(id);
+      await apiService.updateConfirmationStatus(id, 'REJECTED');
       loadData();
       setDialogOpen(false);
     } catch (err: any) {
@@ -141,9 +141,9 @@ export default function AdminDashboard() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved':
+      case 'APPROVED':
         return 'success';
-      case 'rejected':
+      case 'REJECTED':
         return 'error';
       default:
         return 'warning';
@@ -152,9 +152,9 @@ export default function AdminDashboard() {
 
   const getStatusLabel = (status: string) => {
     switch (status) {
-      case 'approved':
+      case 'APPROVED':
         return 'Aprovado';
-      case 'rejected':
+      case 'REJECTED':
         return 'Rejeitado';
       default:
         return 'Pendente';
@@ -169,7 +169,7 @@ export default function AdminDashboard() {
           <Typography variant="h6" sx={{ flexGrow: 1, fontFamily: '"Playfair Display", serif' }}>
             Painel de Administração - Casamento Samuel & Patrícia
           </Typography>
-          <Typography sx={{ mr: 2 }}>Olá, {admin?.username}!</Typography>
+          <Typography sx={{ mr: 2 }}>Olá, {admin?.name}!</Typography>
           <Button color="inherit" startIcon={<Logout />} onClick={logout}>
             Sair
           </Button>
@@ -293,17 +293,13 @@ export default function AdminDashboard() {
                   <TableBody>
                     {confirmations.map((confirmation) => (
                       <TableRow key={confirmation._id} hover>
-                        <TableCell>{confirmation.fullName}</TableCell>
+                        <TableCell>{confirmation.name}</TableCell>
                         <TableCell>{confirmation.email}</TableCell>
-                        <TableCell>{confirmation.phone || '-'}</TableCell>
+                        <TableCell>-</TableCell>
                         <TableCell align="center">
-                          {confirmation.willAttend ? (
-                            <Chip label="Sim" color="success" size="small" />
-                          ) : (
-                            <Chip label="Não" color="default" size="small" />
-                          )}
+                          <Chip label="Sim" color="success" size="small" />
                         </TableCell>
-                        <TableCell align="center">{confirmation.numberOfGuests}</TableCell>
+                        <TableCell align="center">{confirmation.guests}</TableCell>
                         <TableCell align="center">
                           <Chip
                             label={getStatusLabel(confirmation.status)}
@@ -312,7 +308,7 @@ export default function AdminDashboard() {
                           />
                         </TableCell>
                         <TableCell align="center">
-                          {new Date(confirmation.submittedAt).toLocaleDateString('pt-BR')}
+                          {new Date(confirmation.createdAt).toLocaleDateString('pt-BR')}
                         </TableCell>
                         <TableCell align="center">
                           <IconButton
@@ -346,7 +342,7 @@ export default function AdminDashboard() {
             <DialogContent sx={{ mt: 2 }}>
               <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="textSecondary">Nome Completo</Typography>
-                <Typography variant="body1" fontWeight={600}>{selectedConfirmation.fullName}</Typography>
+                <Typography variant="body1" fontWeight={600}>{selectedConfirmation.name}</Typography>
               </Box>
 
               <Box sx={{ mb: 2 }}>
@@ -354,24 +350,15 @@ export default function AdminDashboard() {
                 <Typography variant="body1">{selectedConfirmation.email}</Typography>
               </Box>
 
-              {selectedConfirmation.phone && (
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="subtitle2" color="textSecondary">Telefone</Typography>
-                  <Typography variant="body1">{selectedConfirmation.phone}</Typography>
-                </Box>
-              )}
-
               <Box sx={{ mb: 2 }}>
-                <Typography variant="subtitle2" color="textSecondary">Confirmou Presença</Typography>
-                <Typography variant="body1">
-                  {selectedConfirmation.willAttend ? '✅ Sim' : '❌ Não'}
-                </Typography>
+                <Typography variant="subtitle2" color="textSecondary">Número de Convidados</Typography>
+                <Typography variant="body1">{selectedConfirmation.guests}</Typography>
               </Box>
 
-              {selectedConfirmation.willAttend && (
+              {selectedConfirmation.dietary && (
                 <Box sx={{ mb: 2 }}>
-                  <Typography variant="subtitle2" color="textSecondary">Número de Acompanhantes</Typography>
-                  <Typography variant="body1">{selectedConfirmation.numberOfGuests}</Typography>
+                  <Typography variant="subtitle2" color="textSecondary">Restrições Alimentares</Typography>
+                  <Typography variant="body1">{selectedConfirmation.dietary}</Typography>
                 </Box>
               )}
 
@@ -396,19 +383,16 @@ export default function AdminDashboard() {
               <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="textSecondary">Data de Envio</Typography>
                 <Typography variant="body2">
-                  {new Date(selectedConfirmation.submittedAt).toLocaleString('pt-BR')}
+                  {new Date(selectedConfirmation.createdAt).toLocaleString('pt-BR')}
                 </Typography>
               </Box>
 
-              {selectedConfirmation.reviewedAt && (
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="subtitle2" color="textSecondary">Revisado em</Typography>
-                  <Typography variant="body2">
-                    {new Date(selectedConfirmation.reviewedAt).toLocaleString('pt-BR')}
-                    {selectedConfirmation.reviewedBy && ` por ${selectedConfirmation.reviewedBy}`}
-                  </Typography>
-                </Box>
-              )}
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" color="textSecondary">Última Atualização</Typography>
+                <Typography variant="body2">
+                  {new Date(selectedConfirmation.updatedAt).toLocaleString('pt-BR')}
+                </Typography>
+              </Box>
             </DialogContent>
             <DialogActions sx={{ p: 2, gap: 1 }}>
               <Button
@@ -419,7 +403,7 @@ export default function AdminDashboard() {
                 Deletar
               </Button>
               <Box sx={{ flex: 1 }} />
-              {selectedConfirmation.status !== 'rejected' && (
+              {selectedConfirmation.status !== 'REJECTED' && (
                 <Button
                   startIcon={<Cancel />}
                   color="warning"
@@ -429,7 +413,7 @@ export default function AdminDashboard() {
                   Rejeitar
                 </Button>
               )}
-              {selectedConfirmation.status !== 'approved' && (
+              {selectedConfirmation.status !== 'APPROVED' && (
                 <Button
                   startIcon={<CheckCircle />}
                   color="success"

@@ -14,11 +14,11 @@ import { LockOutlined } from '@mui/icons-material';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function AdminLogin() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,13 +26,21 @@ export default function AdminLogin() {
     setLoading(true);
 
     try {
-      await login(username, password);
+      await login(email, password);
+      // Redirecionar para dashboard após login bem-sucedido
+      window.location.href = '/admin/dashboard';
     } catch (err: any) {
       setError(err.message || 'Erro ao fazer login');
     } finally {
       setLoading(false);
     }
   };
+
+  // Redirecionar se já estiver autenticado
+  if (isAuthenticated) {
+    window.location.href = '/admin/dashboard';
+    return null;
+  }
 
   return (
     <Box
@@ -88,9 +96,10 @@ export default function AdminLogin() {
             <Box component="form" onSubmit={handleSubmit}>
               <TextField
                 fullWidth
-                label="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                label="Email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 autoFocus
                 sx={{ mb: 3 }}

@@ -322,20 +322,18 @@ export default function App() {
 
       const response = await apiService.submitConfirmation(data);
 
-      if (response.success) {
-        confetti({
-          particleCount: 100,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ["#7C5BA6", "#B39CD0", "#8FAA96", "#D4AF76", "#E8B4B8"],
-        });
+      // Resposta da API: { message: "...", rsvp: {...} }
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 },
+        colors: ["#7C5BA6", "#B39CD0", "#8FAA96", "#D4AF76", "#E8B4B8"],
+      });
 
-        setSent(true);
-        (e.currentTarget as HTMLFormElement).reset();
-        setConfirmacao("");
-      } else {
-        setError(response.message || 'Erro ao enviar confirmação');
-      }
+      setSent(true);
+      (e.currentTarget as HTMLFormElement).reset();
+      setConfirmacao("");
+      setConsent(false);
     } catch (err: any) {
       setError(err.message || 'Erro ao enviar confirmação. Tente novamente.');
     } finally {

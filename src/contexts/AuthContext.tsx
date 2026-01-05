@@ -3,7 +3,7 @@ import apiService from '../services/api';
 
 interface Admin {
   id: string;
-  username: string;
+  name: string;
   email: string;
   role: string;
 }
@@ -39,12 +39,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const login = async (username: string, password: string) => {
-    const response = await apiService.login(username, password);
+  const login = async (email: string, password: string) => {
+    const response = await apiService.login(email, password);
     
-    if (response.success && response.data) {
-      setAdmin(response.data.admin);
-      localStorage.setItem('admin_data', JSON.stringify(response.data.admin));
+    // API retorna: { message, token, admin: { id, name, email, role } }
+    if (response.token && response.admin) {
+      setAdmin(response.admin);
+      localStorage.setItem('admin_data', JSON.stringify(response.admin));
     } else {
       throw new Error(response.message || 'Erro ao fazer login');
     }

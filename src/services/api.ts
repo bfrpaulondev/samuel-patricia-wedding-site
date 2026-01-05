@@ -1,5 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.PROD ? '/api' : 'http://localhost:5000/api');
+  'https://samuel-patricia-wedding-api.vercel.app/api';
 
 interface ApiResponse<T = any> {
   success: boolean;
@@ -40,7 +40,7 @@ class ApiService {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<any> {
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
     };
@@ -79,27 +79,35 @@ class ApiService {
     phone?: string;
     willAttend: boolean;
     numberOfGuests?: number;
+    dietaryRestrictions?: string;
     message?: string;
-  }): Promise<ApiResponse> {
-    return this.request('/confirmations', {
+  }): Promise<any> {
+    return this.request('/rsvps', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        name: data.fullName,
+        email: data.email,
+        guests: data.numberOfGuests || 1,
+        dietary: data.dietaryRestrictions,
+        message: data.message,
+      }),
     });
   }
 
-  async checkConfirmation(email: string): Promise<ApiResponse> {
-    return this.request(`/confirmations/check/${encodeURIComponent(email)}`);
+  async checkConfirmation(email: string): Promise<any> {
+    return this.request(`/rsvps/check?email=${encodeURIComponent(email)}`);
   }
 
   // Admin - Autenticação
-  async login(username: string, password: string): Promise<ApiResponse<LoginResponse>> {
-    const response = await this.request<LoginResponse>('/admin/login', {
+  async login(email: string, password: string): Promise<any> {
+    const response = await this.request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
-    if (response.success && response.data?.token) {
-      this.setToken(response.data.token);
+    // API retorna: { message, token, admin: { id, name, email, role } }
+    if (response.token) {
+      this.setToken(response.token);
     }
 
     return response;
@@ -114,34 +122,38 @@ class ApiService {
     status?: string;
     page?: number;
     limit?: number;
-  } = {}): Promise<ApiResponse> {
+  } = {}): Promise<any> {
     const queryParams = new URLSearchParams();
     if (params.status) queryParams.append('status', params.status);
     if (params.page) queryParams.append('page', params.page.toString());
     if (params.limit) queryParams.append('limit', params.limit.toString());
 
-    return this.request(`/admin/confirmations?${queryParams.toString()}`);
+    const query = queryParams.toString();
+    return this.request(`/admin/rsvps${query ? '?' + query : ''}`);
   }
 
-  async approveConfirmation(id: string): Promise<ApiResponse> {
-    return this.request(`/admin/confirmations/${id}/approve`, {
-      method: 'PATCH',
+  async updateConfirmationStatus(id: string, status: 'APPROVED' | 'REJECTED' | 'PENDING'): Promise<any> {
+    return this.request(`/admin/rsvps/${id}/status`, {
+      method: 'PUT',
+      body: JSON.stringify({ status }),
     });
   }
 
-  async rejectConfirmation(id: string): Promise<ApiResponse> {
-    return this.request(`/admin/confirmations/${id}/reject`, {
-      method: 'PATCH',
-    });
+  async approveConfirmation(id: string): Promise<any> {
+    return this.updateConfirmationStatus(id, 'APPROVED');
   }
 
-  async deleteConfirmation(id: string): Promise<ApiResponse> {
-    return this.request(`/admin/confirmations/${id}`, {
+  async rejectConfirmation(id: string): Promise<any> {
+    return this.updateConfirmationStatus(id, 'REJECTED');
+  }
+
+  async deleteConfirmation(id: string): Promise<any> {
+    return this.request(`/admin/rsvps/${id}`, {
       method: 'DELETE',
     });
   }
 
-  async getStats(): Promise<ApiResponse> {
+  async getStats(): Promise<any> {
     return this.request('/admin/stats');
   }
 }
