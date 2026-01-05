@@ -1021,6 +1021,103 @@ export default function App() {
           </Typography>
         </Container>
       </Box>
+
+      {/* DEVELOPER FOOTER */}
+      <Box
+        sx={{
+          background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)",
+          color: "#e0e0e0",
+          py: 4,
+          borderTop: "1px solid rgba(255,255,255,0.1)",
+        }}
+      >
+        <Container sx={{ maxWidth: 820 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: "center",
+              justifyContent: "space-between",
+              gap: 2,
+            }}
+          >
+            {/* Site Name */}
+            <Typography
+              sx={{
+                fontSize: "0.9rem",
+                color: "#b0b0b0",
+                fontWeight: 500,
+              }}
+            >
+              Samuel & Patrícia Wedding Site
+            </Typography>
+
+            {/* Developer Info */}
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: "0.85rem",
+                  color: "#b0b0b0",
+                }}
+              >
+                Desenvolvido por
+              </Typography>
+              <Box
+                component="a"
+                href="https://api.whatsapp.com/send?phone=351935559989&text=Vim%20pelo%20site%20da%20Patricia%20e%20do%20Samuel%20e%20gostaria%20de%20saber%20mais%20informa%C3%A7%C3%B5es%20sobre%20futuros%20projetos"
+                target="_blank"
+                rel="noopener noreferrer"
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 0.5,
+                  color: "#7C5BA6",
+                  textDecoration: "none",
+                  fontWeight: 600,
+                  fontSize: "0.9rem",
+                  transition: "all 0.3s ease",
+                  "&:hover": {
+                    color: "#B39CD0",
+                    transform: "translateY(-2px)",
+                  },
+                }}
+              >
+                <Typography component="span" sx={{ fontSize: "1rem" }}>
+                  @bfrpaulondev
+                </Typography>
+                <Box
+                  component="span"
+                  sx={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    ml: 0.5,
+                  }}
+                >
+                  📱
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+
+          {/* Copyright */}
+          <Typography
+            sx={{
+              mt: 2,
+              fontSize: "0.75rem",
+              color: "#808080",
+              textAlign: "center",
+            }}
+          >
+            © 2026 Todos os direitos reservados
+          </Typography>
+        </Container>
+      </Box>
     </Box>
   );
 }
