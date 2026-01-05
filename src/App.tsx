@@ -288,6 +288,12 @@ export default function App() {
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
   const [consent, setConsent] = useState(false);
+  
+  // Check status states
+  const [checkEmail, setCheckEmail] = useState("");
+  const [checkingStatus, setCheckingStatus] = useState(false);
+  const [statusResult, setStatusResult] = useState<any>(null);
+  const [statusError, setStatusError] = useState("");
 
   const { scrollY } = useScroll();
   const heroY = useTransform(scrollY, [0, 600], [0, 180]);
@@ -338,6 +344,24 @@ export default function App() {
       setError(err.message || 'Erro ao enviar confirmação. Tente novamente.');
     } finally {
       setSubmitting(false);
+    }
+  }
+
+  async function checkStatus(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (checkingStatus) return;
+
+    setCheckingStatus(true);
+    setStatusError("");
+    setStatusResult(null);
+
+    try {
+      const response = await apiService.checkConfirmation(checkEmail);
+      setStatusResult(response);
+    } catch (err: any) {
+      setStatusError(err.message || 'Erro ao verificar status. Tente novamente.');
+    } finally {
+      setCheckingStatus(false);
     }
   }
 
@@ -973,6 +997,119 @@ export default function App() {
                   }}
                 >
                   {submitting ? "Enviando…" : sent ? "Confirmação Enviada!" : "Confirmar Presença 💌"}
+                </Button>
+              </Box>
+            </Box>
+          </motion.div>
+        </Container>
+      </Box>
+
+      {/* CHECK STATUS SECTION */}
+      <Box
+        sx={{
+          py: 10,
+          background: "linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%)",
+          position: "relative",
+        }}
+      >
+        <Container sx={{ position: "relative" }}>
+          <SectionTitle>Verificar Status da Confirmação</SectionTitle>
+
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8 }}>
+            <Box
+              sx={{
+                maxWidth: 600,
+                mx: "auto",
+                mt: 6,
+                p: { xs: 3, md: 5 },
+                borderRadius: 3,
+                background: "rgba(255,255,255,0.95)",
+                backdropFilter: "blur(20px)",
+                boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+              }}
+            >
+              <Typography sx={{ mb: 3, color: "var(--text-light)", textAlign: "center" }}>
+                Já enviou sua confirmação? Digite seu email abaixo para verificar o status.
+              </Typography>
+
+              {statusError && (
+                <Alert severity="error" sx={{ mb: 3 }} onClose={() => setStatusError("")}>
+                  {statusError}
+                </Alert>
+              )}
+
+              {statusResult && (
+                <Alert 
+                  severity={
+                    statusResult.exists === false ? "info" :
+                    statusResult.status === "APPROVED" ? "success" :
+                    statusResult.status === "REJECTED" ? "error" : "warning"
+                  } 
+                  sx={{ mb: 3 }}
+                >
+                  {statusResult.exists === false ? (
+                    <Typography>Nenhuma confirmação encontrada com este email.</Typography>
+                  ) : (
+                    <>
+                      <Typography sx={{ fontWeight: 600, mb: 1 }}>
+                        Olá, {statusResult.name}!
+                      </Typography>
+                      <Typography>
+                        Status da sua confirmação: {" "}
+                        <strong>
+                          {statusResult.status === "PENDING" && "⏳ Pendente de aprovação"}
+                          {statusResult.status === "APPROVED" && "✅ Aprovada! Nos vemos no casamento!"}
+                          {statusResult.status === "REJECTED" && "❌ Não aprovada"}
+                        </strong>
+                      </Typography>
+                      <Typography sx={{ mt: 1, fontSize: "0.9rem" }}>
+                        Enviado em: {new Date(statusResult.submittedAt).toLocaleDateString('pt-BR', { 
+                          day: '2-digit', 
+                          month: 'long', 
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </Typography>
+                    </>
+                  )}
+                </Alert>
+              )}
+
+              <Box component="form" onSubmit={checkStatus}>
+                <TextField
+                  fullWidth
+                  type="email"
+                  required
+                  value={checkEmail}
+                  onChange={(e) => setCheckEmail(e.target.value)}
+                  placeholder="seu@email.com"
+                  label="Email"
+                  sx={{ mb: 3 }}
+                  disabled={checkingStatus}
+                />
+
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  disabled={checkingStatus}
+                  sx={{
+                    py: 1.5,
+                    borderRadius: 3,
+                    background: "var(--gradient-purple)",
+                    boxShadow: "0 8px 25px rgba(124,91,166,0.3)",
+                    textTransform: "uppercase",
+                    letterSpacing: 1.5,
+                    fontWeight: 700,
+                    "&:hover": {
+                      background: "var(--gradient-purple)",
+                      transform: "translateY(-2px)",
+                      boxShadow: "0 12px 30px rgba(124,91,166,0.4)",
+                    },
+                  }}
+                >
+                  {checkingStatus ? "Verificando..." : "Verificar Status 🔍"}
                 </Button>
               </Box>
             </Box>
