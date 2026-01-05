@@ -1110,7 +1110,7 @@ export default function App() {
             sx={{
               mt: 2,
               fontSize: "0.75rem",
-              color: "#808080",
+              color: "#b0b0b0",
               textAlign: "center",
             }}
           >
