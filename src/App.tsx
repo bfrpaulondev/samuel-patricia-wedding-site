@@ -75,12 +75,12 @@ function addToCalendar(eventType: "ceremony" | "party") {
   const title =
     eventType === "ceremony"
       ? "Casamento Samuel & Patrícia - Cerimônia"
-      : "Casamento Samuel & Patrícia - Copo ";
+      : "Casamento Samuel & Patrícia - Recepção";
 
   const location =
     eventType === "ceremony"
       ? "Estr. Montureiras Novas 36, 2910-619 Setúbal"
-      : "Estr. do Castelo de São Filipe CCI 3110, 2900-300 Setúbal";
+      : "Quinta do Patrício, Setúbal";
 
   const details = "Celebração do casamento de Samuel e Patrícia. Contamos com a sua presença!";
   const startDate = "20260517";
@@ -386,7 +386,7 @@ export default function App() {
             position: "absolute",
             inset: 0,
             y: heroY,
-            backgroundImage: 'url("https://i.ibb.co/Qjf5zjkZ/image.png")',
+            backgroundImage: 'url("https://i.ibb.co/NVn4s0G/hero-flowers-sunset.jpg")',
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
@@ -509,20 +509,36 @@ export default function App() {
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8 }}>
             <SectionTitle>Sejam Bem-Vindos!</SectionTitle>
             <Box
-              component="img"
-              src="/bible-quote.jpg"
-              alt="Versículo Bíblico - Colossenses 3:14"
               sx={{
-                display: "block",
                 maxWidth: 820,
                 mx: "auto",
                 mt: 6,
-                width: "100%",
-                height: "auto",
-                borderRadius: 2,
-                boxShadow: "0 4px 20px rgba(0,0,0,0.1)",
+                textAlign: "center",
               }}
-            />
+            >
+              <Typography
+                sx={{
+                  fontFamily: '"Playfair Display", serif',
+                  fontSize: { xs: "1.3rem", md: "1.6rem" },
+                  fontStyle: "italic",
+                  color: "var(--text-dark)",
+                  lineHeight: 1.8,
+                  mb: 2,
+                }}
+              >
+                "Acima de tudo, revistam-se do amor, que é o elo perfeito."
+              </Typography>
+              <Typography
+                sx={{
+                  fontFamily: '"Playfair Display", serif',
+                  fontSize: { xs: "1rem", md: "1.2rem" },
+                  color: "var(--text-light)",
+                  fontWeight: 600,
+                }}
+              >
+                Colossenses 3:14
+              </Typography>
+            </Box>
           </motion.div>
         </Container>
       </Box>
@@ -651,7 +667,7 @@ export default function App() {
               </Card>
             </motion.div>
 
-            {/* Recepção */}
+            {/* Copo-d'água */}
             <motion.div whileHover={{ y: -14 }} transition={{ type: "spring", stiffness: 240, damping: 18 }}>
               <Card
                 sx={{
@@ -686,9 +702,9 @@ export default function App() {
                 </Box>
 
                 <CardContent sx={{ p: 4 }}>
-                  <Typography sx={{ fontWeight: 600, color: "var(--text-dark)" }}>Forte de São Filipe</Typography>
+                  <Typography sx={{ fontWeight: 600, color: "var(--text-dark)" }}>Quinta do Patrício</Typography>
                   <Typography sx={{ mt: 1, color: "var(--text-light)" }}>
-                    Estr. do Castelo de São Filipe CCI 3110, 2900-300 Setúbal
+                    Setúbal
                   </Typography>
 
                   <Box
@@ -702,7 +718,7 @@ export default function App() {
                   >
                     <iframe
                       title="Mapa Recepção"
-                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3119.742!2d-8.909354!3d38.517823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd194376b4db406d%3A0xee4018e616f68d5d!2sForte+de+S%C3%A3o+Filipe!5e0!3m2!1spt-BR!2sbr!4v1727460000000"
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d99518.60779291508!2d-8.9973384!3d38.5244269!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd1943644c764b35%3A0x2a0188d2e3eaae6!2sQuinta%20do%20Patr%C3%ADcio!5e0!3m2!1spt-PT!2spt!4v1736101234567!5m2!1spt-PT!2spt"
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}
@@ -714,7 +730,7 @@ export default function App() {
                   <Box sx={{ mt: 3, display: "flex", gap: 1.5, flexWrap: "wrap" }}>
                     <Button
                       component="a"
-                      href="https://www.google.com/maps/place/Forte+de+S%C3%A3o+Filipe/@38.517823,-8.909354,17z/data=!3m1!4b1!4m5!3m4!1s0xd194376b4db406d:0xee4018e616f68d5d!8m2!3d38.517823!4d-8.909354"
+                      href="https://share.google.com/IhN4vIdPDYIVnMBuz"
                       target="_blank"
                       rel="noreferrer"
                       fullWidth
@@ -1100,7 +1116,6 @@ export default function App() {
                     background: "var(--gradient-purple)",
                     boxShadow: "0 8px 25px rgba(124,91,166,0.3)",
                     textTransform: "uppercase",
-                    color:"black",
                     letterSpacing: 1.5,
                     fontWeight: 700,
                     "&:hover": {
@@ -1145,7 +1160,7 @@ export default function App() {
                 fontWeight: 500,
               }}
             >
-              Samuel & Patrícia
+              Samuel & Patrícia Wedding Site
             </Typography>
 
             {/* Developer Info */}
