@@ -386,7 +386,7 @@ export default function App() {
             position: "absolute",
             inset: 0,
             y: heroY,
-            backgroundImage: 'url("https://i.ibb.co/NVn4s0G/hero-flowers-sunset.jpg")',
+            backgroundImage: 'url("https://www.genspark.ai/api/files/s/gqVgkO63")',
             backgroundPosition: "center",
             backgroundSize: "cover",
           }}
@@ -526,7 +526,7 @@ export default function App() {
                   mb: 2,
                 }}
               >
-                "Acima de tudo, revistam-se do amor, que é o elo perfeito."
+                "Contudo, além de todas estas coisas, revistam-se de amor, pois é o perfeito vínculo de união."
               </Typography>
               <Typography
                 sx={{
@@ -1114,14 +1114,20 @@ export default function App() {
                     py: 1.5,
                     borderRadius: 3,
                     background: "var(--gradient-purple)",
+                    color: "#2c2c2c",
                     boxShadow: "0 8px 25px rgba(124,91,166,0.3)",
                     textTransform: "uppercase",
                     letterSpacing: 1.5,
                     fontWeight: 700,
                     "&:hover": {
-                      background: "var(--gradient-purple)",
+                      background: "linear-gradient(135deg, #8a68b8 0%, #c7b3e0 100%)",
                       transform: "translateY(-2px)",
                       boxShadow: "0 12px 30px rgba(124,91,166,0.4)",
+                    },
+                    "&.Mui-disabled": {
+                      color: "rgba(44, 44, 44, 0.5)",
+                      background: "var(--gradient-purple)",
+                      opacity: 0.7,
                     },
                   }}
                 >
