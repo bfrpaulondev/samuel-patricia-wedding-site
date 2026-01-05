@@ -651,7 +651,7 @@ export default function App() {
               </Card>
             </motion.div>
 
-            {/* Copo-d'água */}
+            {/* Recepção */}
             <motion.div whileHover={{ y: -14 }} transition={{ type: "spring", stiffness: 240, damping: 18 }}>
               <Card
                 sx={{
@@ -678,7 +678,7 @@ export default function App() {
                       zIndex: 1,
                     }}
                   >
-                    Copo-d'água
+                    Recepção
                   </Typography>
                   <Typography sx={{ color: "var(--light-lavender)", position: "relative", zIndex: 1 }}>
                     17 de Maio de 2026 • Após a Cerimônia
@@ -701,7 +701,7 @@ export default function App() {
                     }}
                   >
                     <iframe
-                      title="Mapa Copo-d'água"
+                      title="Mapa Recepção"
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3119.742!2d-8.909354!3d38.517823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd194376b4db406d%3A0xee4018e616f68d5d!2sForte+de+S%C3%A3o+Filipe!5e0!3m2!1spt-BR!2sbr!4v1727460000000"
                       width="100%"
                       height="100%"
@@ -1100,6 +1100,7 @@ export default function App() {
                     background: "var(--gradient-purple)",
                     boxShadow: "0 8px 25px rgba(124,91,166,0.3)",
                     textTransform: "uppercase",
+                    color:"black",
                     letterSpacing: 1.5,
                     fontWeight: 700,
                     "&:hover": {
@@ -1144,7 +1145,7 @@ export default function App() {
                 fontWeight: 500,
               }}
             >
-              Samuel & Patrícia Wedding Site
+              Samuel & Patrícia
             </Typography>
 
             {/* Developer Info */}
