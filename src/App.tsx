@@ -707,6 +707,28 @@ export default function App() {
                     Setúbal
                   </Typography>
 
+                  {/* Foto da Quinta */}
+                  <Box
+                    sx={{
+                      mt: 3,
+                      borderRadius: "20px",
+                      overflow: "hidden",
+                      height: 300,
+                      boxShadow: "0 10px 30px rgba(0,0,0,0.15), inset 0 0 0 1px rgba(124,91,166,0.2)",
+                    }}
+                  >
+                    <Box
+                      component="img"
+                      src="https://i.imgur.com/3gc7G98.webp"
+                      alt="Quinta do Patrício"
+                      sx={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                  </Box>
+
                   <Box
                     sx={{
                       mt: 3,
@@ -730,7 +752,7 @@ export default function App() {
                   <Box sx={{ mt: 3, display: "flex", gap: 1.5, flexWrap: "wrap" }}>
                     <Button
                       component="a"
-                      href="https://share.google.com/IhN4vIdPDYIVnMBuz"
+                      href="https://maps.app.goo.gl/BwVmgwHbzzBbvRVSA"
                       target="_blank"
                       rel="noreferrer"
                       fullWidth
