@@ -75,7 +75,7 @@ function addToCalendar(eventType: "ceremony" | "party") {
   const title =
     eventType === "ceremony"
       ? "Casamento Samuel & Patrícia - Cerimônia"
-      : "Casamento Samuel & Patrícia - Festa";
+      : "Casamento Samuel & Patrícia - Copo ";
 
   const location =
     eventType === "ceremony"
@@ -629,7 +629,7 @@ export default function App() {
               </Card>
             </motion.div>
 
-            {/* FESTA */}
+            {/* Copo-d'água */}
             <motion.div whileHover={{ y: -14 }} transition={{ type: "spring", stiffness: 240, damping: 18 }}>
               <Card
                 sx={{
@@ -656,7 +656,7 @@ export default function App() {
                       zIndex: 1,
                     }}
                   >
-                    Festa
+                    Copo-d'água
                   </Typography>
                   <Typography sx={{ color: "var(--light-lavender)", position: "relative", zIndex: 1 }}>
                     17 de Maio de 2026 • Após a Cerimônia
@@ -679,7 +679,7 @@ export default function App() {
                     }}
                   >
                     <iframe
-                      title="Mapa Festa"
+                      title="Mapa Copo-d'água"
                       src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3119.742!2d-8.909354!3d38.517823!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd194376b4db406d%3A0xee4018e616f68d5d!2sForte+de+S%C3%A3o+Filipe!5e0!3m2!1spt-BR!2sbr!4v1727460000000"
                       width="100%"
                       height="100%"
@@ -950,7 +950,7 @@ export default function App() {
                   }
                   label={
                     <Typography sx={{ fontSize: "0.9rem", color: "var(--text-light)" }}>
-                      Concordo com o uso dos meus dados pessoais para fins de organização do casamento, conforme a LGPD *
+                      Concordo com o uso dos meus dados pessoais para fins de organização do casamento, conforme a LGPD 
                     </Typography>
                   }
                   sx={{ mb: 2, alignItems: "flex-start" }}
