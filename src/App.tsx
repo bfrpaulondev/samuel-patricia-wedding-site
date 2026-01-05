@@ -907,7 +907,7 @@ export default function App() {
                 <TextField name="phone" fullWidth placeholder="+351 912 345 678" sx={{ mb: 3 }} />
 
                 <Typography sx={{ fontWeight: 700, color: "var(--deep-purple)", mb: 1, letterSpacing: 1, textTransform: "uppercase" }}>
-                  Você confirma sua presença? *
+                  Você confirma sua presença? 
                 </Typography>
 
                 <FormControl fullWidth required sx={{ mb: 3 }}>
@@ -921,7 +921,7 @@ export default function App() {
                     <MenuItem value="">
                       <em>Selecione uma opção</em>
                     </MenuItem>
-                    <MenuItem value="sim">✓ Sim, eu vou! 💜</MenuItem>
+                    <MenuItem value="sim">✓ Sim, eu vou!</MenuItem>
                     <MenuItem value="nao">✗ Infelizmente não poderei ir</MenuItem>
                   </Select>
                 </FormControl>
