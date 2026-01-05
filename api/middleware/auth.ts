@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback-secret-key';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -32,7 +32,13 @@ export const authMiddleware = async (
     const token = authHeader.substring(7);
 
     // Verificar token
-    const decoded = jwt.verify(token, JWT_SECRET) as any;
+    interface JWTPayload {
+      id: string;
+      username: string;
+      email: string;
+      role: string;
+    }
+    const decoded = jwt.verify(token, JWT_SECRET) as JWTPayload;
     
     req.user = {
       id: decoded.id,
