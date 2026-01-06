@@ -591,7 +591,7 @@ export default function App() {
                     Cerimônia
                   </Typography>
                   <Typography sx={{ color: "var(--light-lavender)", position: "relative", zIndex: 1 }}>
-                    17 de Maio de 2026 • Horário a confirmar
+                    17 de Maio de 2026 • Horário às 15:00.
                   </Typography>
                 </Box>
 
@@ -775,104 +775,140 @@ export default function App() {
       </Box>
 
       {/* PRESENTES / MBWAY */}
-      <Box sx={{ py: { xs: 10, md: 14 }, background: "var(--white)", position: "relative" }}>
-        <Container>
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.8 }}>
-            <SectionTitle>Presentes</SectionTitle>
-            
-            <Box sx={{ maxWidth: 800, mx: "auto", mt: 6 }}>
-              <Typography
-                sx={{
-                  fontSize: { xs: "1rem", md: "1.1rem" },
-                  color: "var(--text-light)",
-                  lineHeight: 1.8,
-                  textAlign: "center",
-                  mb: 4,
-                }}
-              >
-                Sua presença é o maior presente! Mas, se desejarem nos presentear, 
-                ficaremos felizes em receber uma contribuição via MBway:
-              </Typography>
+<Box sx={{ py: { xs: 10, md: 14 }, background: "var(--white)", position: "relative" }}>
+  <Container>
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8 }}
+    >
+      <SectionTitle>Presentes</SectionTitle>
 
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-                  gap: 4,
-                  mt: 4,
-                }}
-              >
-                {/* Patrícia */}
-                <Card
-                  sx={{
-                    p: 4,
-                    borderRadius: 2,
-                    background: "linear-gradient(135deg, var(--light-lavender) 0%, rgba(255,255,255,0.9) 100%)",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-                    textAlign: "center",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontFamily: '"Tangerine", cursive',
-                      fontSize: "2.5rem",
-                      fontWeight: 700,
-                      color: "var(--deep-purple)",
-                      mb: 2,
-                    }}
-                  >
-                    Patrícia
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "1.3rem",
-                      fontWeight: 600,
-                      color: "var(--deep-purple)",
-                      letterSpacing: 1,
-                    }}
-                  >
-                    +351 931 740 492
-                  </Typography>
-                </Card>
+      <Box sx={{ maxWidth: 700, mx: "auto", mt: 6, textAlign: "center" }}>
+        <Typography
+          sx={{
+            fontSize: { xs: "1rem", md: "1.1rem" },
+            color: "var(--text-light)",
+            lineHeight: 1.8,
+            mb: 4,
+          }}
+        >
+          Sua presença é o maior presente.  
+          Caso desejem contribuir, deixamos abaixo o MBWay:
+        </Typography>
 
-                {/* Samuel */}
-                <Card
-                  sx={{
-                    p: 4,
-                    borderRadius: 2,
-                    background: "linear-gradient(135deg, var(--mint) 0%, rgba(255,255,255,0.9) 100%)",
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.08)",
-                    textAlign: "center",
-                  }}
-                >
-                  <Typography
-                    sx={{
-                      fontFamily: '"Tangerine", cursive',
-                      fontSize: "2.5rem",
-                      fontWeight: 700,
-                      color: "var(--deep-purple)",
-                      mb: 2,
-                    }}
-                  >
-                    Samuel
-                  </Typography>
-                  <Typography
-                    sx={{
-                      fontSize: "1.3rem",
-                      fontWeight: 600,
-                      color: "var(--deep-purple)",
-                      letterSpacing: 1,
-                    }}
-                  >
-                    +351 933 245 603
-                  </Typography>
-                </Card>
-              </Box>
-            </Box>
-          </motion.div>
-        </Container>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Card
+            sx={{
+              p: 4,
+              borderRadius: 3,
+              maxWidth: 360,
+              width: "100%",
+              background: "linear-gradient(135deg, var(--mint) 0%, rgba(255,255,255,0.95) 100%)",
+              boxShadow: "0 6px 24px rgba(0,0,0,0.1)",
+              textAlign: "center",
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: '"Tangerine", cursive',
+                fontSize: "2.6rem",
+                fontWeight: 700,
+                color: "var(--deep-purple)",
+                mb: 2,
+              }}
+            >
+              Samuel
+            </Typography>
+
+            <Typography
+              sx={{
+                fontSize: "1.3rem",
+                fontWeight: 700,
+                color: "var(--deep-purple)",
+                letterSpacing: 1,
+              }}
+            >
+              +351 933 245 603
+            </Typography>
+          </Card>
+        </Box>
       </Box>
+    </motion.div>
+  </Container>
+</Box>
 
+
+      {/* MANUAL DO CONVIDADO */}
+<Box
+  sx={{
+    py: { xs: 10, md: 14 },
+    background: "linear-gradient(135deg, var(--light-lavender) 0%, var(--mint) 100%)",
+    position: "relative",
+    zIndex: 1,
+  }}
+>
+  <Container>
+    <SectionTitle light>Manual do Convidado</SectionTitle>
+
+    <Box
+      sx={{
+        mt: 8,
+        display: "grid",
+        gridTemplateColumns: { xs: "1fr", md: "repeat(3, 1fr)" },
+        gap: 4,
+      }}
+    >
+      {[
+        {
+          icon: "⏰",
+          title: "Seja pontual",
+          text: "Chegue no horário. A cerimônia começará exatamente no horário previsto.",
+        },
+        {
+          icon: "🚫",
+          title: "Convidados não convidam",
+          text: "A confirmação é individual. Não traga acompanhantes não convidados.",
+        },
+        {
+          icon: "👰‍♀️",
+          title: "Branco é a cor da noiva",
+          text: "Evite roupas brancas ou tons muito claros.",
+        },
+      ].map((rule, i) => (
+        <motion.div
+          key={rule.title}
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: i * 0.1 }}
+          viewport={{ once: true }}
+        >
+          <Card
+            sx={{
+              p: 4,
+              borderRadius: 3,
+              textAlign: "center",
+              background: "rgba(255,255,255,0.95)",
+              boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+              height: "100%",
+            }}
+          >
+            <Typography sx={{ fontSize: 48, mb: 2 }}>{rule.icon}</Typography>
+            <Typography sx={{ fontWeight: 800, color: "var(--deep-purple)", mb: 1 }}>
+              {rule.title}
+            </Typography>
+            <Typography sx={{ color: "var(--text-light)", fontSize: "0.95rem" }}>
+              {rule.text}
+            </Typography>
+          </Card>
+        </motion.div>
+      ))}
+    </Box>
+  </Container>
+</Box>
+
+      
       {/* RSVP */}
       <Box
         id="rsvp"
