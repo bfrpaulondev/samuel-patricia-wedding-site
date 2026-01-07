@@ -1024,7 +1024,7 @@ export default function App() {
                   }
                   label={
                     <Typography sx={{ fontSize: "0.9rem", color: "var(--text-light)" }}>
-                      Concordo com o uso dos meus dados pessoais para fins de organização do casamento, conforme a LGPD 
+                      Concordo com o uso dos meus dados pessoais para fins de organização do casamento, conforme a RGPD
                     </Typography>
                   }
                   sx={{ mb: 2, alignItems: "flex-start" }}
