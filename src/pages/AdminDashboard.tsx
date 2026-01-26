@@ -43,11 +43,13 @@ import apiService from '../services/api';
 
 interface Confirmation {
   _id: string;
-  name: string;
+  fullName: string;
   email: string;
+  phone?: string;
+  willAttend: boolean;
   guests: number;
   message?: string;
-  dietary?: string;
+  dietaryRestrictions?: string;
   status: 'PENDING' | 'APPROVED' | 'REJECTED';
   createdAt: string;
   updatedAt: string;
@@ -89,12 +91,10 @@ export default function AdminDashboard() {
         apiService.getStats(),
       ]);
 
-      // A API retorna: { rsvps: [...], total: N, page: N, pages: N }
       if (confirmationsRes.rsvps) {
         setConfirmations(confirmationsRes.rsvps);
       }
 
-      // A API retorna as stats diretamente
       if (statsRes) {
         setStats(statsRes);
       }
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
 
   const handleApprove = async (id: string) => {
     try {
-      await apiService.updateConfirmationStatus(id, 'APPROVED');
+      await apiService.approveConfirmation(id);
       loadData();
       setDialogOpen(false);
     } catch (err: any) {
@@ -117,7 +117,7 @@ export default function AdminDashboard() {
 
   const handleReject = async (id: string) => {
     try {
-      await apiService.updateConfirmationStatus(id, 'REJECTED');
+      await apiService.rejectConfirmation(id);
       loadData();
       setDialogOpen(false);
     } catch (err: any) {
@@ -161,6 +161,14 @@ export default function AdminDashboard() {
     }
   };
 
+  const getAttendanceLabel = (willAttend: boolean) => {
+    return willAttend ? 'Sim' : 'Não';
+  };
+
+  const getAttendanceColor = (willAttend: boolean) => {
+    return willAttend ? 'success' : 'error';
+  };
+
   return (
     <Box sx={{ minHeight: '100vh', background: '#f5f5f5' }}>
       {/* Header */}
@@ -185,70 +193,62 @@ export default function AdminDashboard() {
 
         {/* Estatísticas */}
         {stats && (
-          <Box sx={{ mb: 4 }}>
-            <Box>
-              <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box>
-                      <Typography variant="h4" fontWeight={700}>
-                        {stats.totalConfirmations}
-                      </Typography>
-                      <Typography>Total de Confirmações</Typography>
-                    </Box>
-                    <PeopleAlt sx={{ fontSize: 50, opacity: 0.7 }} />
+          <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 2, mb: 4 }}>
+            <Card sx={{ background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white' }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" fontWeight={700}>
+                      {stats.totalConfirmations}
+                    </Typography>
+                    <Typography>Total de Confirmações</Typography>
                   </Box>
-                </CardContent>
-              </Card>
-            </Box>
+                  <PeopleAlt sx={{ fontSize: 50, opacity: 0.7 }} />
+                </Box>
+              </CardContent>
+            </Card>
 
-            <Box>
-              <Card sx={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box>
-                      <Typography variant="h4" fontWeight={700}>
-                        {stats.pendingCount}
-                      </Typography>
-                      <Typography>Pendentes</Typography>
-                    </Box>
-                    <Pending sx={{ fontSize: 50, opacity: 0.7 }} />
+            <Card sx={{ background: 'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)', color: 'white' }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" fontWeight={700}>
+                      {stats.pendingCount}
+                    </Typography>
+                    <Typography>Pendentes</Typography>
                   </Box>
-                </CardContent>
-              </Card>
-            </Box>
+                  <Pending sx={{ fontSize: 50, opacity: 0.7 }} />
+                </Box>
+              </CardContent>
+            </Card>
 
-            <Box>
-              <Card sx={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box>
-                      <Typography variant="h4" fontWeight={700}>
-                        {stats.approvedCount}
-                      </Typography>
-                      <Typography>Aprovados</Typography>
-                    </Box>
-                    <ThumbUp sx={{ fontSize: 50, opacity: 0.7 }} />
+            <Card sx={{ background: 'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)', color: 'white' }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" fontWeight={700}>
+                      {stats.approvedCount}
+                    </Typography>
+                    <Typography>Aprovados</Typography>
                   </Box>
-                </CardContent>
-              </Card>
-            </Box>
+                  <ThumbUp sx={{ fontSize: 50, opacity: 0.7 }} />
+                </Box>
+              </CardContent>
+            </Card>
 
-            <Box>
-              <Card sx={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', color: 'white' }}>
-                <CardContent>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Box>
-                      <Typography variant="h4" fontWeight={700}>
-                        {stats.totalGuests}
-                      </Typography>
-                      <Typography>Total de Convidados</Typography>
-                    </Box>
-                    <EventAvailable sx={{ fontSize: 50, opacity: 0.7 }} />
+            <Card sx={{ background: 'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)', color: 'white' }}>
+              <CardContent>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Box>
+                    <Typography variant="h4" fontWeight={700}>
+                      {stats.totalGuests}
+                    </Typography>
+                    <Typography>Total de Convidados</Typography>
                   </Box>
-                </CardContent>
-              </Card>
-            </Box>
+                  <EventAvailable sx={{ fontSize: 50, opacity: 0.7 }} />
+                </Box>
+              </CardContent>
+            </Card>
           </Box>
         )}
 
@@ -284,7 +284,7 @@ export default function AdminDashboard() {
                       <TableCell><strong>Email</strong></TableCell>
                       <TableCell><strong>Telefone</strong></TableCell>
                       <TableCell align="center"><strong>Presença</strong></TableCell>
-                      <TableCell align="center"><strong>Acompanhantes</strong></TableCell>
+                      <TableCell align="center"><strong>Convidados</strong></TableCell>
                       <TableCell align="center"><strong>Status</strong></TableCell>
                       <TableCell align="center"><strong>Data</strong></TableCell>
                       <TableCell align="center"><strong>Ações</strong></TableCell>
@@ -293,11 +293,15 @@ export default function AdminDashboard() {
                   <TableBody>
                     {confirmations.map((confirmation) => (
                       <TableRow key={confirmation._id} hover>
-                        <TableCell>{confirmation.name}</TableCell>
+                        <TableCell>{confirmation.fullName}</TableCell>
                         <TableCell>{confirmation.email}</TableCell>
-                        <TableCell>-</TableCell>
+                        <TableCell>{confirmation.phone || '-'}</TableCell>
                         <TableCell align="center">
-                          <Chip label="Sim" color="success" size="small" />
+                          <Chip 
+                            label={getAttendanceLabel(confirmation.willAttend)} 
+                            color={getAttendanceColor(confirmation.willAttend) as any} 
+                            size="small" 
+                          />
                         </TableCell>
                         <TableCell align="center">{confirmation.guests}</TableCell>
                         <TableCell align="center">
@@ -342,7 +346,7 @@ export default function AdminDashboard() {
             <DialogContent sx={{ mt: 2 }}>
               <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="textSecondary">Nome Completo</Typography>
-                <Typography variant="body1" fontWeight={600}>{selectedConfirmation.name}</Typography>
+                <Typography variant="body1" fontWeight={600}>{selectedConfirmation.fullName}</Typography>
               </Box>
 
               <Box sx={{ mb: 2 }}>
@@ -351,14 +355,28 @@ export default function AdminDashboard() {
               </Box>
 
               <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" color="textSecondary">Telefone</Typography>
+                <Typography variant="body1">{selectedConfirmation.phone || 'Não informado'}</Typography>
+              </Box>
+
+              <Box sx={{ mb: 2 }}>
+                <Typography variant="subtitle2" color="textSecondary">Confirmou Presença</Typography>
+                <Chip 
+                  label={getAttendanceLabel(selectedConfirmation.willAttend)} 
+                  color={getAttendanceColor(selectedConfirmation.willAttend) as any} 
+                  sx={{ mt: 1 }}
+                />
+              </Box>
+
+              <Box sx={{ mb: 2 }}>
                 <Typography variant="subtitle2" color="textSecondary">Número de Convidados</Typography>
                 <Typography variant="body1">{selectedConfirmation.guests}</Typography>
               </Box>
 
-              {selectedConfirmation.dietary && (
+              {selectedConfirmation.dietaryRestrictions && (
                 <Box sx={{ mb: 2 }}>
                   <Typography variant="subtitle2" color="textSecondary">Restrições Alimentares</Typography>
-                  <Typography variant="body1">{selectedConfirmation.dietary}</Typography>
+                  <Typography variant="body1">{selectedConfirmation.dietaryRestrictions}</Typography>
                 </Box>
               )}
 
