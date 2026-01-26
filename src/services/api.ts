@@ -85,10 +85,12 @@ class ApiService {
     return this.request('/rsvps', {
       method: 'POST',
       body: JSON.stringify({
-        name: data.fullName,
+        fullName: data.fullName,
         email: data.email,
+        phone: data.phone,
+        willAttend: data.willAttend,
         guests: data.numberOfGuests || 1,
-        dietary: data.dietaryRestrictions,
+        dietaryRestrictions: data.dietaryRestrictions,
         message: data.message,
       }),
     });
@@ -105,7 +107,6 @@ class ApiService {
       body: JSON.stringify({ email, password }),
     });
 
-    // API retorna: { message, token, admin: { id, name, email, role } }
     if (response.token) {
       this.setToken(response.token);
     }
@@ -133,8 +134,8 @@ class ApiService {
   }
 
   async updateConfirmationStatus(id: string, status: 'APPROVED' | 'REJECTED' | 'PENDING'): Promise<any> {
-    return this.request(`/admin/rsvps/${id}/status`, {
-      method: 'PUT',
+    return this.request(`/admin/rsvps/${id}`, {
+      method: 'PATCH',
       body: JSON.stringify({ status }),
     });
   }
